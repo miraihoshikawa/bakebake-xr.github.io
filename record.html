@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>記録する — デジタルアース上に時空間で可視化 | ばけばけXR</title>
+<meta name="title-en" content="Record — Spatio-temporal mapping on a digital earth | BAKEBAKE XR">
+<meta name="description" content="ばけばけXR の第三の体験「記録する」。生成された妖怪と過去の伝承をデジタルアース上に重ね、オープンソース GIS で伝承の「場所」を扱う研究へ。">
+<link rel="canonical" href="https://icchyhiroki.github.io/bakebake-xr.github.io/record.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ばけばけXR / BakebakeXR">
+<meta property="og:title" content="記録する — デジタルアース上に時空間で可視化 | ばけばけXR">
+<meta property="og:description" content="生成された妖怪と過去の伝承をデジタルアース上に重ね、オープンソース GIS で伝承の「場所」を扱う研究へ。">
+<meta property="og:image" content="https://icchyhiroki.github.io/bakebake-xr.github.io/images/photos/og_record.jpg">
+<meta property="og:url" content="https://icchyhiroki.github.io/bakebake-xr.github.io/record.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#14110f">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23b3301f'/%3E%3Ctext x='32' y='44' font-size='34' text-anchor='middle' fill='%23f4eee2' font-family='serif' font-weight='700'%3E化%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="images/icon-180.png">
+<script>try{var q=new URLSearchParams(location.search).get('lang');document.documentElement.lang=(q==='en'||(!q&&localStorage.getItem('bakebake-lang')==='en'))?'en':'ja'}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<a class="skip" href="#top"><span class="ja">本文へ</span><span class="en">Skip to content</span></a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" data-internal aria-label="ばけばけXR">
+      <span class="mark" aria-hidden="true">化</span>
+      <span class="name">ばけばけXR</span><small>BAKEBAKE XR</small>
+    </a>
+    <nav class="nav" id="nav" aria-label="main">
+      <a href="index.html#about" data-internal><span class="ja">概要</span><span class="en">About</span></a>
+      <a href="index.html#experiences" data-internal aria-current="true"><span class="ja">三つの体験</span><span class="en">Experiences</span></a>
+      <a href="index.html#activities" data-internal><span class="ja">活動</span><span class="en">Activities</span></a>
+      <a href="index.html#publications" data-internal><span class="ja">論文・発表</span><span class="en">Publications</span></a>
+      <a href="index.html#team" data-internal><span class="ja">メンバー</span><span class="en">Team</span></a>
+      <a href="index.html#contact" data-internal><span class="ja">お問い合わせ</span><span class="en">Contact</span></a>
+    </nav>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="lang-toggle" id="langToggle" type="button"><span class="ja" lang="en">EN</span><span class="en" lang="ja">日本語</span></button>
+      <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="nav" aria-label="Menu">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="top" tabindex="-1">
+  <section class="page-hero" aria-labelledby="page-title">
+    <div class="wrap">
+      <nav aria-label="breadcrumb"><ol class="crumb"><li><a href="index.html" data-internal>HOME</a></li><li><a href="index.html#experiences" data-internal><span class="ja">三つの体験</span><span class="en">EXPERIENCES</span></a></li><li aria-current="page"><span class="ja">記録する</span><span class="en">RECORD</span></li></ol></nav>
+      <p class="num">EXPERIENCE 03 ── <span class="ja">記録する</span><span class="en">RECORD</span></p>
+      <h1 id="page-title" class="ja">デジタルアース上に<wbr>時空間で可視化</h1>
+      <h1 class="en">Spatio-temporal mapping on a digital earth</h1>
+      <p class="lead ja">生成された妖怪と過去の伝承を地図の上に重ね、「いま」と「むかし」を行き来する。展示のデジタルアースから、伝承の「場所」をオープンソース GIS で扱う研究へ。</p>
+      <p class="lead en">Generated yōkai and historical records layered on a map, moving between "now" and "then" — from the exhibition's digital earth to research that handles the "place" of folklore with open-source GIS.</p>
+    </div>
+    <figure>
+      <div class="visual full">
+        <img src="images/photos/record_map.webp" alt="ばけばけXR のデジタルアース画面。東京の3D地図上に妖怪の出現地点が色付きの円で示され、右上に「いま／むかし」の切り替えがある" width="1600" height="900" fetchpriority="high">
+      </div>
+      <div class="wrap"><figcaption class="caption ja">展示用デジタルアース。伝承と生成された妖怪を地図上に配置し、「いま／むかし」を切り替える</figcaption><figcaption class="caption en">The exhibition digital earth: records and generated yōkai placed on the map, with a "now / then" toggle</figcaption></div>
+    </figure>
+  </section>
+
+  <section class="page-body">
+    <div class="wrap prose-grid">
+      <div class="prose">
+        <h2 class="ja">土地に積み重なった怪異を辿る</h2>
+        <h2 class="en">Tracing the uncanny layered on a place</h2>
+        <p class="ja">「記録する」体験では、デジタルアースの上に二つの層を重ねます。一つは怪異・妖怪伝承データベースに収められた過去の伝承、もう一つは「作る」体験で来場者が生み出したばかりの妖怪です。「いま」と「むかし」を切り替えながら、同じ土地にどんな怪異が語られてきたかを眺めることができます。</p>
+        <p class="en">"Record" layers two things on a digital earth: the historical records of the Kaii–Yōkai Folklore Database, and the yōkai that visitors have just created in "Make". Switching between "now" and "then", you can see what kinds of uncanny events have been told about the same ground.</p>
+
+        <h2 class="ja">伝承の「場所」は点ではない</h2>
+        <h2 class="en">The "place" of a tale is not a point</h2>
+        <p class="ja">伝承を地図に載せようとすると、すぐに壁にぶつかります。記録に書かれているのは「岐阜県」「川のほとり」「墓」「峠道」といった<strong>幅のある場所</strong>であって、緯度経度ではありません。県庁所在地に点を打てば、地図は実際の証拠より精密に見えてしまいます。</p>
+        <p class="en">Put a tale on a map and you hit a wall at once. What the record says is "Gifu Prefecture", "by a river", "a grave", "a mountain pass" — <strong>places with breadth</strong>, not coordinates. Drop a pin on the prefectural capital and the map looks more precise than the evidence allows.</p>
+        <p class="ja">そこで本プロジェクトでは、各記録を「点」ではなく、行政区域のポリゴン・地名の候補・場所を表す語（川・道・境界・住居・葬送・禁忌など）・出典といった<strong>複数の証拠チャンネル</strong>として表現し、どこまでの解像度が記録に裏付けられているかを保ったまま可視化する手法を、オープンソース GIS で構築しました。この成果を FOSS4G Hiroshima 2026 の Academic Track で発表しています。</p>
+        <p class="en">So instead of a point, the project represents each record as <strong>several evidence channels</strong> — administrative polygons, candidate toponyms, place-description terms (water, roads, boundaries, dwellings, death rituals, taboos…) and provenance — and visualises them while keeping the resolution the record actually supports. Built with open-source GIS, this work was presented in the Academic Track of FOSS4G Hiroshima 2026.</p>
+
+        <div class="stats" aria-label="figures from the study">
+          <div class="stat"><p class="v">33,378<small class="ja">件</small><small class="en">records</small></p><p class="ja l">解析対象にした伝承記録（元データ 35,305 行を整形）</p><p class="en l">folklore records analysed (cleaned from 35,305 database rows)</p></div>
+          <div class="stat"><p class="v">75.0<small>%</small></p><p class="ja l">地名ではなく「川・道・墓」のような場所の言葉で語られる記録の割合（地名を含む記録は 28.0%）</p><p class="en l">share of records that describe place with words like river, road or grave rather than a place name (28.0% contain a place name)</p></div>
+          <div class="stat"><p class="v">97.5<small>%</small></p><p class="ja l">地名から市区町村まで特定できた記録（1,231 件）で、候補エリアの面積がどれだけ小さくなったか（中央値）</p><p class="en l">how much the candidate area shrank (median) for the 1,231 records that could be narrowed from prefecture to municipality</p></div>
+        </div>
+        <p class="ja" style="font-size:.85rem;color:var(--ink-3)">数値は FOSS4G Hiroshima 2026 発表論文より。ルールで拾えた割合であり、拾った内容の正しさ（精度）を示すものではありません。</p>
+        <p class="en" style="font-size:.85rem;color:var(--ink-3)">Figures from the FOSS4G Hiroshima 2026 paper. They are the share of records where a rule matched, not how accurate the match was.</p>
+
+        <h2 class="ja">なぜ「記録する」のか</h2>
+        <h2 class="en">Why record?</h2>
+        <p class="ja">「作る」体験で生まれた妖怪は感熱紙の上で消えていきますが、地図上の記録は残ります。消えるものと残るもの、その両方をつくることで、妖怪文化を「保存された過去」ではなく「いまも増え続ける営み」として扱う――それが三つの体験を貫く考え方です。</p>
+        <p class="en">A yōkai born in "Make" fades on its thermal paper, but its record on the map remains. Creating both what disappears and what stays is how the project treats yōkai culture not as a preserved past but as a practice that keeps growing — the idea that runs through all three experiences.</p>
+      </div>
+
+      <aside class="aside">
+        <div class="fact">
+          <p class="k">PAPER</p>
+          <p><strong>From Point Anchors to Geospatial Support: A Resolution-Aware Representation of Toponymic and Non-Toponymic Place Evidence in a Japanese Yokai Archive</strong></p>
+          <p style="margin-top:6px">Kosuke Shimizu, Hiroki Ichikura, Riri Ikebe, Mirai Hoshikawa</p>
+          <p class="ja" style="margin-top:6px">FOSS4G Hiroshima 2026 Academic Track（2026.09.02, Cosmos2）</p>
+          <p class="en" style="margin-top:6px">FOSS4G Hiroshima 2026 Academic Track (Sept 2, 2026, Cosmos2)</p>
+          <p style="margin-top:8px"><a href="https://2026.foss4g.org/en/program-schedule/presentations/" target="_blank" rel="noopener"><span class="ja">プログラム</span><span class="en">Program</span></a></p>
+        </div>
+        <div class="fact">
+          <p class="k">DATA &amp; TOOLS</p>
+          <ul>
+            <li class="ja">怪異・妖怪伝承データベース（国際日本文化研究センター）</li><li class="en">Kaii–Yōkai Folklore Database (Nichibunken)</li>
+            <li>GADM 4.1 / Natural Earth / <span class="ja">国土数値情報（河川）</span><span class="en">MLIT National Land Numerical Information (rivers)</span></li>
+            <li>GeoJSON / <span class="ja">オープンソース GIS</span><span class="en">open-source GIS</span></li>
+            <li class="ja">デジタルアース（展示用 3D 地図）</li><li class="en">Digital earth (3D map for exhibitions)</li>
+          </ul>
+        </div>
+        <div class="fact">
+          <p class="k">RELATED</p>
+          <p><a href="https://doi.org/10.24506/jsda.9.s2_s226" target="_blank" rel="noopener"><span class="ja">デジタルアーカイブ学会誌 予稿（DOI）</span><span class="en">JSDA proceedings (DOI)</span></a></p>
+          <p style="margin-top:6px"><a href="index.html#publications" data-internal><span class="ja">論文・発表一覧 →</span><span class="en">All publications →</span></a></p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <nav class="pager" aria-label="experiences">
+    <div class="wrap">
+      <a href="make.html" data-internal><p class="k">PREV ── 02</p><p class="t"><span class="ja">← 作る：自分の怪異体験から妖怪を生み出す</span><span class="en">← Make: a yōkai from your own experience</span></p></a>
+      <a class="next" href="index.html#experiences" data-internal><p class="k">↑ EXPERIENCES</p><p class="t"><span class="ja">三つの体験へ戻る</span><span class="en">Back to the three experiences</span></p></a>
+    </div>
+  </nav>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>© 2025–2026 BAKEBAKE XR Project</p>
+    <p><span class="ja">怪異・妖怪伝承データベース：国際日本文化研究センター</span><span class="en">Kaii–Yōkai Folklore Database: International Research Center for Japanese Studies</span></p>
+  </div>
+</footer>
+<script src="assets/site.js"></script>
+</body>
+</html>

@@ -1,533 +1,418 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ばけばけXR - BakebakeXR</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', sans-serif;
-            background: linear-gradient(135deg, #1a0c2e 0%, #2d1b4e 50%, #1a0c2e 100%);
-            color: #fff;
-            overflow-x: hidden;
-        }
-
-        /* ナビゲーショントグルボタン */
-        .nav-toggle {
-            position: fixed;
-            top: 30px;
-            left: 30px;
-            z-index: 1000;
-            cursor: pointer;
-            width: 30px;
-            height: 25px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .nav-toggle span {
-            width: 100%;
-            height: 3px;
-            background: #fff;
-            transition: all 0.3s;
-        }
-
-        .nav-toggle.active span:nth-child(1) {
-            transform: rotate(45deg) translate(8px, 8px);
-        }
-
-        .nav-toggle.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .nav-toggle.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(8px, -8px);
-        }
-
-        /* ナビゲーションメニュー */
-        .nav-menu {
-            position: fixed;
-            top: 0;
-            left: -300px;
-            width: 300px;
-            height: 100vh;
-            background: rgba(20, 10, 40, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 999;
-            transition: left 0.3s;
-            padding: 100px 30px 30px;
-        }
-
-        .nav-menu.active {
-            left: 0;
-        }
-
-        .nav-menu a {
-            display: block;
-            color: #fff;
-            text-decoration: none;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            transition: color 0.3s;
-        }
-
-        .nav-menu a:hover {
-            color: #a78bfa;
-        }
-
-        /* 言語切替ボタン */
-        .lang-switch {
-            position: fixed;
-            top: 30px;
-            right: 30px;
-            z-index: 1000;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 25px;
-            padding: 10px 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .lang-switch:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        /* ヒーローセクション */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 100px 20px;
-            position: relative;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 50% 50%, rgba(167, 139, 250, 0.1) 0%, transparent 70%);
-            animation: pulse 4s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
-
-        .title-ja {
-            font-size: 5rem;
-            font-weight: bold;
-            margin-bottom: 20px;
-            background: linear-gradient(45deg, #a78bfa, #ec4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            position: relative;
-            z-index: 1;
-        }
-
-        .title-en {
-            font-size: 2rem;
-            letter-spacing: 5px;
-            margin-bottom: 40px;
-            color: rgba(255, 255, 255, 0.8);
-            position: relative;
-            z-index: 1;
-        }
-
-        .description {
-            max-width: 800px;
-            line-height: 1.8;
-            font-size: 1.1rem;
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 60px;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* セクション */
-        section {
-            padding: 100px 20px;
-        }
-
-        .section-title {
-            font-size: 3rem;
-            text-align: center;
-            margin-bottom: 80px;
-            background: linear-gradient(45deg, #a78bfa, #ec4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        /* プロモーションビデオ */
-        .video-container {
-            max-width: 900px;
-            margin: 0 auto;
-            position: relative;
-            padding-bottom: 50.625%;
-            height: 0;
-            overflow: hidden;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(167, 139, 250, 0.3);
-        }
-
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        /* プロダクト紹介 */
-        .products {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .product-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 30px;
-            transition: all 0.3s;
-            backdrop-filter: blur(10px);
-        }
-
-        .product-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(167, 139, 250, 0.3);
-            border-color: rgba(167, 139, 250, 0.5);
-        }
-
-        .product-image {
-            width: 100%;
-            height: 200px;
-            background: linear-gradient(135deg, rgba(167, 139, 250, 0.2), rgba(236, 72, 153, 0.2));
-            border-radius: 15px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-        }
-
-        .product-text {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        /* 実績 */
-        .achievements {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            max-width: 400px;
-            margin: 0 auto;
-        }
-
-        .achievement-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 30px;
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        .achievement-name {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            color: #a78bfa;
-        }
-
-        .achievement-links a {
-            display: inline-block;
-            margin: 5px 10px;
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .achievement-links a:hover {
-            color: #ec4899;
-        }
-
-        /* メンバー紹介 */
-        .members {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .member-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 30px;
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        .member-card:hover {
-            transform: scale(1.05);
-            border-color: rgba(167, 139, 250, 0.5);
-        }
-
-        .member-name {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            color: #a78bfa;
-        }
-
-        .member-links a {
-            display: inline-block;
-            margin: 5px 10px;
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .member-links a:hover {
-            color: #ec4899;
-        }
-
-        /* 言語切替用のクラス */
-        .lang-ja { display: block; }
-        .lang-en { display: none; }
-        
-        body.en .lang-ja { display: none; }
-        body.en .lang-en { display: block; }
-
-        @media (max-width: 768px) {
-            .title-ja {
-                font-size: 3rem;
-            }
-
-            .title-en {
-                font-size: 1.5rem;
-            }
-
-            .section-title {
-                font-size: 2rem;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ばけばけXR — 見えないものを、感じる。妖怪文化のXRアーカイブ</title>
+<meta name="title-en" content="BAKEBAKE XR — Sensing the unseen. An XR archive of yōkai culture">
+<meta name="description" content="ばけばけXR は、妖怪を「見る・作る・記録する」XRアーカイブ。伝承を多感覚的に学ぶ没入体験、生成AIによる新しい妖怪づくり、デジタルアース上での時空間可視化を通して、妖怪文化の動的な保全と振興に取り組みます。">
+<link rel="canonical" href="https://icchyhiroki.github.io/bakebake-xr.github.io/">
+<link rel="alternate" hreflang="ja" href="https://icchyhiroki.github.io/bakebake-xr.github.io/">
+<link rel="alternate" hreflang="en" href="https://icchyhiroki.github.io/bakebake-xr.github.io/?lang=en">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ばけばけXR / BakebakeXR">
+<meta property="og:title" content="ばけばけXR — 見えないものを、感じる。">
+<meta property="og:description" content="妖怪を「見る・作る・記録する」XRアーカイブ。伝承の没入体験、生成AIによる妖怪づくり、デジタルアース上の時空間可視化。">
+<meta property="og:image" content="https://icchyhiroki.github.io/bakebake-xr.github.io/images/photos/og.jpg">
+<meta property="og:url" content="https://icchyhiroki.github.io/bakebake-xr.github.io/">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@icchy_yakumo">
+<meta name="theme-color" content="#14110f">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23b3301f'/%3E%3Ctext x='32' y='44' font-size='34' text-anchor='middle' fill='%23f4eee2' font-family='serif' font-weight='700'%3E化%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="images/icon-180.png">
+<script>try{var q=new URLSearchParams(location.search).get('lang');document.documentElement.lang=(q==='en'||(!q&&localStorage.getItem('bakebake-lang')==='en'))?'en':'ja'}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
-    <!-- ナビゲーショントグル -->
-    <div class="nav-toggle" onclick="toggleMenu()">
-        <span></span>
-        <span></span>
-        <span></span>
-    </div>
+<a class="skip" href="#top"><span class="ja">本文へ</span><span class="en">Skip to content</span></a>
 
-    <!-- ナビゲーションメニュー -->
-    <nav class="nav-menu">
-        <a href="#home"><span class="lang-ja">ホーム</span><span class="lang-en">Home</span></a>
-        <a href="#video"><span class="lang-ja">プロモーションビデオ</span><span class="lang-en">Promotional Video</span></a>
-        <a href="#products"><span class="lang-ja">プロダクト紹介</span><span class="lang-en">Products</span></a>
-        <a href="#achievements"><span class="lang-ja">実績</span><span class="lang-en">Achievements</span></a>
-        <a href="#members"><span class="lang-ja">メンバー</span><span class="lang-en">Members</span></a>
-        <a href="#contact"><span class="lang-ja">お問い合わせ</span><span class="lang-en">Contact</span></a>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" data-internal aria-label="ばけばけXR">
+      <span class="mark" aria-hidden="true">化</span>
+      <span class="name">ばけばけXR</span><small>BAKEBAKE XR</small>
+    </a>
+    <nav class="nav" id="nav" aria-label="main">
+      <a href="#about"><span class="ja">概要</span><span class="en">About</span></a>
+      <a href="#experiences"><span class="ja">三つの体験</span><span class="en">Experiences</span></a>
+      <a href="#activities"><span class="ja">活動</span><span class="en">Activities</span></a>
+      <a href="#publications"><span class="ja">論文・発表</span><span class="en">Publications</span></a>
+      <a href="#team"><span class="ja">メンバー</span><span class="en">Team</span></a>
+      <a href="#contact"><span class="ja">お問い合わせ</span><span class="en">Contact</span></a>
     </nav>
-
-    <!-- 言語切替ボタン -->
-    <div class="lang-switch" onclick="toggleLanguage()">
-        <span class="lang-ja">English</span>
-        <span class="lang-en">日本語</span>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="lang-toggle" id="langToggle" type="button"><span class="ja" lang="en">EN</span><span class="en" lang="ja">日本語</span></button>
+      <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="nav" aria-label="Menu">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
     </div>
+  </div>
+</header>
 
-    <!-- ヒーローセクション -->
-    <section id="home" class="hero">
-        <h1 class="title-ja">ばけばけXR</h1>
-        <h2 class="title-en">BakebakeXR</h2>
-        <p class="description lang-ja">
-            「ばけばけXR」は、体験者に怪異伝承の理解と現代的な解釈を促すシステムです。本コンテンツは、(i) 伝承を多感覚的に学ぶための没入型体験、(ii) 体験者の怪異体験を基に生成AIを用いて新たな妖怪を創造する体験と (iii) 生成された妖怪と過去の伝承をデジタルアース上に時空間的に可視化する体験、という三つの主要機能を持つ。本コンテンツによって、体験者の恐怖や不思議などの主観体験から形成された妖怪文化の特色を生かし、「ばけばけXR」が過去の伝承と現代の体験を多面的に結びつけ、妖怪文化の動的な保全と振興に貢献する。
-        </p>
-        <p class="description lang-en">
-            "BakebakeXR" is a system that encourages participants to understand and interpret yokai folklore in contemporary ways. This content features three main functions: (i) an immersive experience for learning folklore through multiple senses, (ii) an experience to create new yokai using generative AI based on participants' supernatural experiences, and (iii) an experience to spatiotemporally visualize generated yokai and past folklore on a digital earth. This system leverages the characteristics of yokai culture formed from subjective experiences such as fear and wonder, connecting past traditions with contemporary experiences in multifaceted ways, contributing to the dynamic preservation and promotion of yokai culture.
-        </p>
-    </section>
+<main id="top" tabindex="-1">
+  <!-- ===== HERO ===== -->
+  <section class="hero" aria-labelledby="hero-title">
+    <picture>
+      <source media="(max-width:700px)" srcset="images/photos/hero_portrait.webp">
+      <img src="images/photos/hero.webp" alt="暗い展示空間に古地図と「赤坂 紀伊國坂」の文字が赤く投影されている" fetchpriority="high">
+    </picture>
+    <div class="wrap">
+      <p class="eyebrow">YOKAI × XR × GENERATIVE AI × DIGITAL EARTH</p>
+      <h1 id="hero-title">ばけばけXR<span class="en-name">BAKEBAKE XR</span></h1>
+      <p class="catch ja">見えないものを、<em>感じる</em>。<br>妖怪を「見る・作る・記録する」<span class="nowrap">XRアーカイブ。</span></p>
+      <p class="catch en">Sensing the <em>unseen</em>.<br>An XR archive for seeing, making and recording yōkai.</p>
+      <p class="lead ja">XR・生成AI・デジタルアースを組み合わせ、三つの体験で妖怪文化を過去から現在へつなぐプロジェクトです。</p>
+      <p class="lead en">A project that connects yōkai culture from past to present through three experiences, combining XR, generative AI and a digital earth.</p>
+      <div class="cta">
+        <a class="btn primary" href="#experiences"><span class="ja">三つの体験を見る</span><span class="en">The three experiences</span></a>
+        <a class="btn ghost" href="#activities"><span class="ja">活動・展示</span><span class="en">Activities</span></a>
+      </div>
+      <a class="news" href="#activities"><b>LATEST</b><span class="ja">FOSS4G Hiroshima 2026 Academic Track で発表（9月2日）</span><span class="en">Presented at FOSS4G Hiroshima 2026 Academic Track (Sept 2)</span></a>
+    </div>
+  </section>
 
-    <!-- プロモーションビデオ -->
-    <section id="video">
-        <h2 class="section-title lang-ja">プロモーションビデオ</h2>
-        <h2 class="section-title lang-en">Promotional Video</h2>
-        <div class="video-container">
-            <!-- YouTube動画のリンクをここに埋め込んでください -->
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/aHgcSVWnUmc?si=pwT-Kba7ruzBBmdz" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  <!-- ===== ABOUT ===== -->
+  <section id="about" aria-labelledby="about-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="label">ABOUT</p>
+        <h2 id="about-title" class="serif"><span class="ja">怪異伝承の理解と、<wbr>現代的な解釈を<wbr>促すシステム</span><span class="en">A system for understanding and reinterpreting yōkai folklore</span></h2>
+      </div>
+      <div class="about-grid">
+        <div class="about-text">
+          <p class="ja">妖怪は、名付けようのない不思議な体験に名前と形を与えてきた日本の文化です。しかし現代では、妖怪は「すでに完成した過去の資料」として消費されがちで、自分の体験から新しい妖怪を生み出すという営みはほとんど失われています。</p>
+          <p class="en">Yōkai are a Japanese cultural practice of giving names and forms to strange, unexplained experiences. Today, however, yōkai are mostly consumed as finished historical records, and the act of creating a new one from one's own experience has nearly disappeared.</p>
+          <p class="ja">「ばけばけXR」は、XR・生成AI・地理空間情報を組み合わせ、体験者が妖怪文化に<strong>参加者として</strong>関わるための場をつくります。国際日本文化研究センター「怪異・妖怪伝承データベース」の伝承を土台に、過去の伝承と現代の体験を多面的に結びつけ、妖怪文化の動的な保全と振興に貢献することを目指しています。</p>
+          <p class="en">BAKEBAKE XR combines XR, generative AI and geospatial data so that people can take part in yōkai culture <strong>as participants</strong>. Built on the Nichibunken Kaii–Yōkai Folklore Database, it links historical records with contemporary experience and aims at the dynamic preservation and renewal of yōkai culture.</p>
+          <div class="keywords" aria-label="keywords">
+            <span>Yōkai</span><span>XR</span><span>Generative AI</span><span>Digital Earth</span><span>Open-Source GIS</span><span>Intangible Cultural Heritage</span>
+          </div>
         </div>
-    </section>
+        <figure class="about-photo">
+          <img src="images/photos/booth.webp" alt="展示ブースのパネル「1. 妖怪を見る 2. 作る 3. 記録する」とVRヘッドセット" loading="lazy" width="1200" height="800">
+          <figcaption class="ja">展示ブースにて（XR Meetup Aichi 2025）。妖怪を「見る・作る・記録する」三つの体験。</figcaption>
+          <figcaption class="en">At the booth (XR Meetup Aichi 2025): the three experiences — see, make, record.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
 
-    <!-- プロダクト紹介 -->
-    <section id="products">
-        <h2 class="section-title lang-ja">プロダクト紹介</h2>
-        <h2 class="section-title lang-en">Products</h2>
-        <div class="products">
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="./images/products/project1.png" alt="怪異について知る映像体験" style="object-fit: fill; width: 350px; height: 200px;">
-                </div>
-                <p class="product-text lang-ja">
-                        伝承を多感覚的に学ぶための没入体験
-                </p>
-                <p class="product-text lang-en">
-                        Immersive experience for learning folklore through multiple senses
-                </p>
-            </div>
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="./images/products/project2.png" alt="怪異をビジュアル化する妖怪生成" style="object-fit: fill; width: 200px; height: 200px;">
-                </div>
-                <center>
-                <p class="product-text lang-ja">
-                        体験者の怪異体験を基に<br>生成AIを用いた妖怪作り
-                </p>
-                <p class="product-text lang-en">
-                    Experience to create new yokai using generative AI based on supernatural experiences
-                </p>
-                </center>
-            </div>
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="./images/products/project3.png" alt="デジタルアースで妖怪をマッピングする" style="object-fit: fill; width: 350px; height: 200px;">
-                </div>
-                <p class="product-text lang-ja">生成された妖怪と過去の伝承を<br>デジタルアース上での時空間する体験</p>
-                <p class="product-text lang-en">Experience to spatiotemporally visualize generated yokai and past folklore on digital earth</p>
-            </div>
+  <!-- ===== EXPERIENCES ===== -->
+  <section id="experiences" class="alt" aria-labelledby="feat-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="label">EXPERIENCES</p>
+        <h2 id="feat-title" class="serif"><span class="ja">三つの体験</span><span class="en">Three experiences</span></h2>
+        <p class="ja">来場者は「見る → 作る → 記録する」の順にめぐります。各体験の詳細ページへ進めます。</p>
+        <p class="en">Visitors move through see → make → record. Open each experience for details.</p>
+      </div>
+      <div class="features">
+        <a class="feature" href="see.html" data-internal>
+          <div class="img"><img src="images/photos/feat_view.webp" alt="提灯を持つ旅人と顔のない女が描かれた投影映像" loading="lazy" width="1200" height="900"></div>
+          <div class="body">
+            <p class="num">01 ── <span class="ja">見る</span><span class="en">SEE</span></p>
+            <h3 class="ja">伝承を多感覚的に学ぶ<wbr>没入体験</h3>
+            <h3 class="en">Immersive learning of folklore</h3>
+            <p class="ja">怪異が語られた土地の古地図と映像で、伝承の世界に入り込む XR コンテンツ。</p>
+            <p class="en">XR content that draws you into a tale through the old maps and imagery of the place where it was told.</p>
+            <span class="more"><span class="ja">詳しく見る</span><span class="en">Read more</span></span>
+          </div>
+        </a>
+        <a class="feature" href="make.html" data-internal>
+          <div class="img"><img src="images/photos/feat_make.webp" alt="生成AIで生成された妖怪画像がアプリ画面に表示されている" loading="lazy" width="1200" height="900"></div>
+          <div class="body">
+            <p class="num">02 ── <span class="ja">作る</span><span class="en">MAKE</span></p>
+            <h3 class="ja">自分の怪異体験から<wbr>妖怪を生み出す</h3>
+            <h3 class="en">Making a yōkai from your own experience</h3>
+            <p class="ja">説明のつかない体験を語ると、伝承データベースと生成AIが名前・物語・姿を提案。感熱紙に記録します。</p>
+            <p class="en">Describe an unexplained experience; the folklore database and generative AI propose a name, a story and a form, printed on thermal paper.</p>
+            <span class="more"><span class="ja">詳しく見る</span><span class="en">Read more</span></span>
+          </div>
+        </a>
+        <a class="feature" href="record.html" data-internal>
+          <div class="img"><img src="images/photos/feat_record.webp" alt="デジタルアース上に妖怪の出現地点がマッピングされた画面" loading="lazy" width="1000" height="750"></div>
+          <div class="body">
+            <p class="num">03 ── <span class="ja">記録する</span><span class="en">RECORD</span></p>
+            <h3 class="ja">デジタルアース上に<wbr>時空間で可視化</h3>
+            <h3 class="en">Spatio-temporal mapping on a digital earth</h3>
+            <p class="ja">生成された妖怪と過去の伝承を地図に重ね、「いま」と「むかし」を行き来する。オープンソース GIS による研究へ。</p>
+            <p class="en">Generated yōkai and historical records layered on a map, moving between "now" and "then" — and into open-source GIS research.</p>
+            <span class="more"><span class="ja">詳しく見る</span><span class="en">Read more</span></span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ACTIVITIES ===== -->
+  <section id="activities" aria-labelledby="act-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="label">ACTIVITIES</p>
+        <h2 id="act-title" class="serif"><span class="ja">活動・展示・発表</span><span class="en">Activities, exhibitions and talks</span></h2>
+        <p class="ja">2025年夏の開発開始から、展示・登壇・学会発表を重ねています。</p>
+        <p class="en">Since development began in summer 2025, the project has been shown and presented at the following venues.</p>
+      </div>
+      <div class="timeline">
+
+        <article class="tl-item">
+          <div>
+            <p class="tl-date">2026.09.02 <span class="tag talk">TALK</span></p>
+            <h3 class="ja">FOSS4G Hiroshima 2026 <wbr>— Academic Track 発表</h3>
+            <h3 class="en">FOSS4G Hiroshima 2026 — Academic Track</h3>
+            <p class="ja">「Geographic Visualization of the Kaii-Yokai Folklore Database Using Open-Source GIS and NLP」。広島国際会議場 Cosmos2 にて（9月2日 16:00）。</p>
+            <p class="en">"Geographic Visualization of the Kaii-Yokai Folklore Database Using Open-Source GIS and NLP." International Conference Center Hiroshima, room Cosmos2, Sept 2, 16:00.</p>
+            <p class="links"><a href="https://2026.foss4g.org/en/program-schedule/presentations/" target="_blank" rel="noopener"><span class="ja">プログラム</span><span class="en">Program</span></a><a href="record.html" data-internal><span class="ja">記録する →</span><span class="en">Record →</span></a></p>
+          </div>
+          <figure>
+            <img src="images/photos/foss4g_talk.webp" alt="FOSS4G Hiroshima 2026 の会場で発表する様子" loading="lazy" width="1200" height="800">
+            <figcaption class="ja">FOSS4G Hiroshima 2026（2026.09.02）</figcaption>
+            <figcaption class="en">FOSS4G Hiroshima 2026, Sept 2, 2026</figcaption>
+          </figure>
+        </article>
+
+        <article class="tl-item">
+          <div>
+            <p class="tl-date">2026 <span class="tag grant">GRANT</span></p>
+            <h3 class="ja">日本財団 HUMAI プログラム <wbr>— GS枠（step）採択</h3>
+            <h3 class="en">Selected for the Nippon Foundation HUMAI Program (GS / step)</h3>
+            <p class="ja">人文社会領域 × AI の次世代研究者を支援する日本財団 HUMAI プログラムに採択されました。</p>
+            <p class="en">Selected for the Nippon Foundation HUMAI Program, which supports next-generation researchers working across the humanities and AI.</p>
+            <p class="links"><a href="https://zen.ac.jp/humai" target="_blank" rel="noopener"><span class="ja">プログラム公式</span><span class="en">Program site</span></a></p>
+          </div>
+        </article>
+
+        <article class="tl-item">
+          <div>
+            <p class="tl-date">2026.02.22 <span class="tag exhibit">EXHIBIT</span></p>
+            <h3 class="ja">YOKAI EXPO 2026<wbr>（香川県・小豆島）<wbr>ブース出展</h3>
+            <h3 class="en">Booth at YOKAI EXPO 2026, Shodoshima</h3>
+            <p class="ja">土庄町総合会館フレトピアホールで開催された「日本最大級の妖怪見本市」に出展。来場者の怪異体験から妖怪を生成し、時間とともに消える感熱紙に記録しました。</p>
+            <p class="en">Exhibited at Japan's largest yōkai fair at Tonosho Town Hall (Furetopia Hall). Visitors' uncanny experiences were turned into yōkai and printed on thermal paper that fades over time.</p>
+            <p class="links"><a href="https://www.yokaiexpo.com/" target="_blank" rel="noopener">YOKAI EXPO</a><a href="make.html" data-internal><span class="ja">作る →</span><span class="en">Make →</span></a></p>
+          </div>
+          <figure>
+            <img src="images/photos/expo_booth.webp" alt="YOKAI EXPO 2026 のブースに立つメンバー4人と、机に並んだ感熱紙の妖怪記録" loading="lazy" width="1400" height="933">
+            <figcaption class="ja">YOKAI EXPO 2026 ブース（2026.02.22）</figcaption>
+            <figcaption class="en">Our booth at YOKAI EXPO 2026, Feb 22, 2026</figcaption>
+          </figure>
+        </article>
+
+        <article class="tl-item">
+          <div>
+            <p class="tl-date">2026.01.10 <span class="tag paper">POSTER</span></p>
+            <h3 class="ja">デジタルアーカイブ学会 <wbr>第10回研究大会 <wbr>ポスター発表</h3>
+            <h3 class="en">Poster at the 10th Annual Conference of the Japan Society for Digital Archive</h3>
+            <p class="ja">「没入型技術とAIを活用した妖怪のインタラクティブなデジタルプラットフォーム『ばけばけXR』の取り組み」[P10]。予稿はデジタルアーカイブ学会誌に掲載。</p>
+            <p class="en">"An Interactive Digital Platform for Yōkai Using Immersive Technology and AI: BAKEBAKE XR" [P10]. Proceedings published in the Journal of the Japan Society for Digital Archive.</p>
+            <p class="links"><a href="https://doi.org/10.24506/jsda.9.s2_s226" target="_blank" rel="noopener">J-STAGE (DOI)</a></p>
+          </div>
+        </article>
+
+        <article class="tl-item">
+          <div>
+            <p class="tl-date">2025.12.02 – 03 <span class="tag exhibit">EXHIBIT</span></p>
+            <h3 class="ja">XR Kaigi 2025 <wbr>— Iwaken Lab. ブース展示</h3>
+            <h3 class="en">XR Kaigi 2025 — Iwaken Lab. booth</h3>
+            <p class="ja">国内最大級の XR カンファレンス XR Kaigi 2025 のエキスポフロアにて、Iwaken Lab. ブースの一作品として展示。</p>
+            <p class="en">Shown at the Iwaken Lab. booth on the expo floor of XR Kaigi 2025, one of Japan's largest XR conferences.</p>
+            <p class="links"><a href="https://www.xrkaigi.com/" target="_blank" rel="noopener">XR Kaigi</a></p>
+          </div>
+        </article>
+
+        <article class="tl-item">
+          <div>
+            <p class="tl-date">2025.11.22 <span class="tag exhibit">EXHIBIT</span></p>
+            <h3 class="ja">XR Meetup Aichi 2025 #1<wbr>（名古屋）展示</h3>
+            <h3 class="en">XR Meetup Aichi 2025 #1, Nagoya</h3>
+            <p class="ja">KITTE名古屋 JPタワー名古屋ホール＆カンファレンスで開催された東海地区の XR コミュニティイベントに出展。</p>
+            <p class="en">Exhibited at the Tōkai-area XR community event held at KITTE Nagoya / JP Tower Nagoya Hall &amp; Conference.</p>
+            <p class="links"><a href="https://peatix.com/event/4530538" target="_blank" rel="noopener">Peatix</a></p>
+          </div>
+          <figure>
+            <img src="images/photos/xrmeetup_aichi.webp" alt="XR Meetup Aichi の会場でVRヘッドセットを装着して体験する来場者" loading="lazy" width="1200" height="800">
+            <figcaption class="ja">XR Meetup Aichi 2025 #1（2025.11.22）</figcaption>
+            <figcaption class="en">XR Meetup Aichi 2025 #1, Nov 22, 2025</figcaption>
+          </figure>
+        </article>
+
+        <article class="tl-item">
+          <div>
+            <p class="tl-date">2025.09.12 <span class="tag talk">PITCH</span></p>
+            <h3 class="ja">TOKYO NODE "XR HACKATHON" <wbr>— Final Pitch 進出</h3>
+            <h3 class="en">TOKYO NODE "XR HACKATHON" — Final Pitch</h3>
+            <p class="ja">TOKYO NODE LAB 主催・Niantic Spatial 協力の都市体験 XR ハッカソン（2025年7〜10月）。開発期間を経て Final Pitch に進出しました。</p>
+            <p class="en">A city-experience XR hackathon run by TOKYO NODE LAB with Niantic Spatial (July–Oct 2025). The team advanced to the Final Pitch.</p>
+            <p class="links"><a href="https://www.tokyonode.jp/lab/events/20250619_01/index.html" target="_blank" rel="noopener"><span class="ja">イベントページ</span><span class="en">Event page</span></a></p>
+          </div>
+          <figure>
+            <img src="images/photos/pitch_final.webp" alt="TOKYO NODE XR HACKATHON Final Pitch で登壇する様子" loading="lazy" width="1200" height="799">
+            <figcaption class="ja">Final Pitch（2025.09.12）</figcaption>
+            <figcaption class="en">Final Pitch, Sept 12, 2025</figcaption>
+          </figure>
+        </article>
+
+        <article class="tl-item">
+          <div>
+            <p class="tl-date">2025.08.20 <span class="tag exhibit">DEMO</span></p>
+            <h3 class="ja">TSUKUBA CONNÉCT #79 <wbr>— XR 実機展示</h3>
+            <h3 class="en">TSUKUBA CONNÉCT #79 — XR demo table</h3>
+            <p class="ja">「拡張される現実、交差する未来：XRがひらく社会実装のフロンティア」（つくばスタートアップパーク）の Demo Table にて実機展示。</p>
+            <p class="en">Live demo at the XR-themed edition of TSUKUBA CONNÉCT held at Tsukuba Startup Park.</p>
+            <p class="links"><a href="https://civicpower.jp/event/735/" target="_blank" rel="noopener"><span class="ja">イベントページ</span><span class="en">Event page</span></a></p>
+          </div>
+          <figure>
+            <img src="images/photos/tsukuba_connect.webp" alt="TSUKUBA CONNÉCT のデモテーブルで来場者に体験してもらう様子" loading="lazy" width="1200" height="799">
+            <figcaption class="ja">TSUKUBA CONNÉCT #79（2025.08.20）</figcaption>
+            <figcaption class="en">TSUKUBA CONNÉCT #79, Aug 20, 2025</figcaption>
+          </figure>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PUBLICATIONS ===== -->
+  <section id="publications" class="alt" aria-labelledby="pub-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="label">PUBLICATIONS</p>
+        <h2 id="pub-title" class="serif"><span class="ja">論文・発表</span><span class="en">Publications</span></h2>
+      </div>
+      <div class="pubs">
+        <article class="pub">
+          <div class="venue">FOSS4G</div>
+          <div>
+            <h3>From Point Anchors to Geospatial Support: A Resolution-Aware Representation of Toponymic and Non-Toponymic Place Evidence in a Japanese Yokai Archive</h3>
+            <p class="authors">Kosuke Shimizu, Hiroki Ichikura, Riri Ikebe, Mirai Hoshikawa</p>
+            <p class="meta"><span class="ja">FOSS4G Hiroshima 2026 Academic Track（2026年9月2日、広島国際会議場）</span><span class="en">FOSS4G Hiroshima 2026 Academic Track, Sept 2, 2026, International Conference Center Hiroshima</span></p>
+            <p class="links"><a href="https://2026.foss4g.org/en/program-schedule/presentations/" target="_blank" rel="noopener"><span class="ja">プログラム</span><span class="en">Program</span></a><a href="record.html" data-internal><span class="ja">研究の概要 →</span><span class="en">Overview →</span></a></p>
+          </div>
+        </article>
+        <article class="pub">
+          <div class="venue">JSDA</div>
+          <div>
+            <h3 class="ja">没入型技術とAIを活用した<wbr>妖怪のインタラクティブな<wbr>デジタルプラットフォーム<wbr>『ばけばけXR』の取り組み</h3>
+            <h3 class="en">An Interactive Digital Platform for Yōkai Using Immersive Technology and AI: BAKEBAKE XR</h3>
+            <p class="authors"><span class="ja">一倉 弘毅, 清水 紘輔, 干川 未来, 池辺 莉々</span><span class="en">Hiroki Ichikura, Kosuke Shimizu, Mirai Hoshikawa, Riri Ikebe</span></p>
+            <p class="meta"><span class="ja">デジタルアーカイブ学会誌 9(s2), s226–s229, 2026（第10回研究大会予稿）</span><span class="en">Journal of the Japan Society for Digital Archive 9(s2), s226–s229, 2026 (10th Annual Conference proceedings)</span></p>
+            <p class="links"><a href="https://doi.org/10.24506/jsda.9.s2_s226" target="_blank" rel="noopener">DOI: 10.24506/jsda.9.s2_s226</a></p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TEAM ===== -->
+  <section id="team" aria-labelledby="team-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="label">TEAM</p>
+        <h2 id="team-title" class="serif"><span class="ja">メンバー</span><span class="en">Team</span></h2>
+        <p class="ja">筑波大学と日本女子大学の学生4名によるプロジェクトです。</p>
+        <p class="en">A student project by four members from the University of Tsukuba and Japan Women's University.</p>
+      </div>
+      <div class="team">
+        <div class="member">
+          <img src="images/members/icchy.webp" alt="" width="150" height="150" loading="lazy">
+          <h3 class="ja">一倉 弘毅<span class="nick">いっちー</span></h3>
+          <h3 class="en">Hiroki Ichikura</h3>
+          <p class="roma ja">Hiroki Ichikura</p>
+          <p class="roma en">"icchy"</p>
+          <p class="aff ja">筑波大学大学院<br>知能機能システム<wbr>学位プログラム <span class="nowrap">博士課程</span></p>
+          <p class="aff en">Doctoral Program in Intelligent and Mechanical Interaction Systems, University of Tsukuba</p>
+          <div class="links">
+            <a href="https://x.com/icchy_yakumo" target="_blank" rel="noopener">X</a>
+            <a href="https://note.com/icchy0204" target="_blank" rel="noopener">note</a>
+            <a href="https://ultra-citron-588.notion.site/icchy-ba0bd360576641b2b01c6dd7b3b3ef25?pvs=74" target="_blank" rel="noopener">Portfolio</a>
+          </div>
         </div>
-    </section>
-
-    <!-- 実績紹介 -->
-    <section id="achievements">
-        <h2 class="section-title lang-ja">実績</h2>
-        <h2 class="section-title lang-en">Achievements</h2>
-        <div class="achievements">
-            <div class="achievement-card">
-                <div class="achievement-image">
-                    <img src="./images/achievements/pitch-20250912.jpg" alt="発表者：icchy" style="object-fit: fill; width: 350px; height: 200px;">
-                </div>
-                <center>
-                <p class="achievement-text lang-ja">
-                        Tokyo Node "XR HACKATHON" の <br> Final Pitch
-                </p>
-                <p class="achievement-text lang-en">
-                        Final Pitch of Tokyo Node "XR HACKATHON"
-                </p>
-                <a href="https://www.tokyonode.jp/lab/events/20250619_01/index.html" target="_blank">Webpage</a>
-                </center>
-            </div>
+        <div class="member">
+          <img src="images/members/shimizu.webp" alt="" width="150" height="150" loading="lazy">
+          <h3 class="ja">清水 紘輔</h3>
+          <h3 class="en">Kosuke Shimizu</h3>
+          <p class="roma ja">Kosuke Shimizu</p>
+          <p class="aff ja">筑波大学 情報学群<br>情報メディア創成学類</p>
+          <p class="aff en">College of Media Arts, Science and Technology, University of Tsukuba</p>
+          <div class="links">
+            <a href="https://x.com/ksk432smz" target="_blank" rel="noopener">X</a>
+            <a href="https://ksk432.com/" target="_blank" rel="noopener">Web</a>
+            <a href="https://researchmap.jp/ksk432" target="_blank" rel="noopener">researchmap</a>
+          </div>
         </div>
-    </section>
-
-
-    <!-- メンバー紹介 -->
-    <section id="members">
-        <h2 class="section-title lang-ja">メンバー</h2>
-        <h2 class="section-title lang-en">Members</h2>
-        <div class="members">
-            <div class="member-card">
-                <img src="./images/icon/icchy.jpg" style="object-fit: fill; width: 200px; height: 200px;">
-                <h3 class="member-name lang-ja">いっちー</h3>
-                <h3 class="member-name lang-en">Icchy</h3>
-                <div class="member-links">
-                    <a href="https://x.com/icchy_yakumo" target="_blank">SNS</a>
-                    <a href="https://ultra-citron-588.notion.site/icchy-ba0bd360576641b2b01c6dd7b3b3ef25?pvs=74" target="_blank" class="lang-en">Portfolio</a>
-                </div>
-            </div>
-            <div class="member-card">
-                <img src="./images/icon/RiriIkebe.jpg" style="object-fit: fill; width: 200px; height: 200px;">
-                <h3 class="member-name lang-ja">池辺　莉々</h3>
-                <h3 class="member-name lang-en">Riri Ikebe</h3>
-                <div class="member-links">
-                    <a href="#" target="_blank">SNS</a>
-                </div>
-            </div>
-            <div class="member-card">
-                <img src="./images/icon/KosukeShimizu.jpg" style="object-fit: fill; width: 200px; height: 200px;">
-                <h3 class="member-name lang-ja">清水　紘輔</h3>
-                <h3 class="member-name lang-en">Kosuke Shimizu</h3>
-                <div class="member-links">
-                    <a href="#" target="_blank">SNS</a>
-                </div>
-            </div>
-            <div class="member-card">
-                <img src="./images/icon/MiraiHishikawa.jpg" style="object-fit: fill; width: 200px; height: 200px;">
-                <h3 class="member-name lang-ja">干川　未来</h3>
-                <h3 class="member-name lang-en">Mirai Hoshikawa</h3>
-                <div class="member-links">
-                    <a href="#" target="_blank">SNS</a>
-                </div>
-            </div>
+        <div class="member">
+          <img src="images/members/ikebe.webp" alt="" width="150" height="150" loading="lazy">
+          <h3 class="ja">池辺 莉々</h3>
+          <h3 class="en">Riri Ikebe</h3>
+          <p class="roma ja">Riri Ikebe</p>
+          <p class="aff ja">日本女子大学 文学部 史学科</p>
+          <p class="aff en">Department of History, Japan Women's University</p>
         </div>
-    </section>
-
-    <!-- お問い合わせ -->
-    <section id="contact">
-        <h2 class="section-title lang-ja">お問い合わせ</h2>
-        <h2 class="section-title lang-en">Contact</h2>
-        <div style="max-width: 600px; margin: 0 auto; text-align: center;">
-            <p style="font-size: 1.1rem; line-height: 2; margin-bottom: 30px;" class="lang-ja">
-                ご質問やお問い合わせは、以下の連絡先までお気軽にご連絡ください。
-            </p>
-            <p style="font-size: 1.1rem; line-height: 2; margin-bottom: 30px;" class="lang-en">
-                For inquiries, please feel free to contact us through the following channels.
-            </p>
-            <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 40px; backdrop-filter: blur(10px);">
-                <div style="margin-bottom: 25px;">
-                    <p style="color: #a78bfa; font-size: 0.9rem; margin-bottom: 10px;">Email</p>
-                    <a href="mailto:icchyWorks@gmail.com" style="color: #fff; text-decoration: none; font-size: 1.2rem; transition: color 0.3s;">icchyWorks@gmail.com</a>
-                </div>
-                <div>
-                    <p style="color: #a78bfa; font-size: 0.9rem; margin-bottom: 10px;">X (Twitter)</p>
-                    <a href="https://x.com/icchy_yakumo" target="_blank" style="color: #fff; text-decoration: none; font-size: 1.2rem; transition: color 0.3s;">@icchy_yakumo</a>
-                </div>
-            </div>
+        <div class="member">
+          <img src="images/members/hoshikawa.webp" alt="" width="150" height="150" loading="lazy">
+          <h3 class="ja">干川 未来</h3>
+          <h3 class="en">Mirai Hoshikawa</h3>
+          <p class="roma ja">Mirai Hoshikawa</p>
+          <p class="aff ja">筑波大学大学院<br>知能機能システム<wbr>学位プログラム <span class="nowrap">修士課程</span></p>
+          <p class="aff en">Master's Program in Intelligent and Mechanical Interaction Systems, University of Tsukuba</p>
+          <div class="links">
+            <a href="https://miraihoshikawa.github.io/" target="_blank" rel="noopener">Portfolio</a>
+            <a href="https://www.instagram.com/hoshi_153/" target="_blank" rel="noopener">Instagram</a>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <script>
-        function toggleMenu() {
-            document.querySelector('.nav-toggle').classList.toggle('active');
-            document.querySelector('.nav-menu').classList.toggle('active');
-        }
+  <!-- ===== FOLLOW & CONTACT ===== -->
+  <section id="contact" class="dark" aria-labelledby="contact-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="label">FOLLOW</p>
+        <h2 id="contact-title" class="serif"><span class="ja">最新情報・お問い合わせ</span><span class="en">Updates &amp; contact</span></h2>
+        <p class="ja">展示予定や制作の裏側は、メンバーの SNS と note で発信しています。</p>
+        <p class="en">Upcoming exhibitions and behind-the-scenes notes are posted on our members' social accounts.</p>
+      </div>
+      <div class="links-grid">
+        <a class="link-card" href="https://x.com/icchy_yakumo" target="_blank" rel="noopener">
+          <p class="k">X</p><p class="v">@icchy_yakumo</p>
+          <p class="d ja">いっちー — プロジェクトの最新情報</p><p class="d en">icchy — project updates</p>
+        </a>
+        <a class="link-card" href="https://x.com/ksk432smz" target="_blank" rel="noopener">
+          <p class="k">X</p><p class="v">@ksk432smz</p>
+          <p class="d ja">清水 紘輔 — 研究・開発</p><p class="d en">Kosuke Shimizu — research &amp; development</p>
+        </a>
+        <a class="link-card" href="https://note.com/icchy0204" target="_blank" rel="noopener">
+          <p class="k">NOTE</p><p class="v">icchy</p>
+          <p class="d ja">フィールドワークと制作の記録</p><p class="d en">Fieldwork and making-of notes</p>
+        </a>
+      </div>
+      <div class="contact-box">
+        <div>
+          <h3 class="ja">お問い合わせ</h3>
+          <h3 class="en">Contact</h3>
+          <p class="ja">展示・取材・共同研究のご相談はお気軽にご連絡ください。</p>
+          <p class="en">For exhibitions, press or research collaboration, please get in touch.</p>
+        </div>
+        <div>
+          <p class="row"><span class="k">EMAIL</span><a href="mailto:icchyWorks@gmail.com">icchyWorks@gmail.com</a></p>
+          <p class="row"><span class="k">X</span><a href="https://x.com/icchy_yakumo" target="_blank" rel="noopener">@icchy_yakumo</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
 
-        function toggleLanguage() {
-            document.body.classList.toggle('en');
-        }
-
-        // スムーススクロール
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth' });
-                    toggleMenu();
-                }
-            });
-        });
-    </script>
+<footer>
+  <div class="wrap">
+    <p>© 2025–2026 BAKEBAKE XR Project</p>
+    <p><span class="ja">怪異・妖怪伝承データベース：国際日本文化研究センター</span><span class="en">Kaii–Yōkai Folklore Database: International Research Center for Japanese Studies</span></p>
+  </div>
+</footer>
+<script src="assets/site.js"></script>
 </body>
 </html>
