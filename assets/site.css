@@ -73,7 +73,7 @@ section{scroll-margin-top:64px}
 .hero picture,.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
 .hero img{object-position:50% 50%}
 .hero::after{content:"";position:absolute;inset:0;z-index:-1;background:
-  linear-gradient(90deg,rgba(20,17,15,.78) 0%,rgba(20,17,15,.45) 45%,rgba(20,17,15,.05) 80%),
+  linear-gradient(90deg,rgba(20,17,15,.86) 0%,rgba(20,17,15,.6) 45%,rgba(20,17,15,.12) 80%),
   linear-gradient(180deg,rgba(20,17,15,.1) 0%,rgba(20,17,15,.2) 50%,rgba(20,17,15,.88) 100%)}
 .hero .wrap{padding-top:120px;padding-bottom:64px;width:100%}
 .hero .eyebrow{font-size:.8rem;letter-spacing:.3em;color:rgba(244,238,226,.75);margin-bottom:18px}
@@ -89,7 +89,7 @@ section{scroll-margin-top:64px}
 .hero .news b{font-size:.62rem;letter-spacing:.18em;background:var(--vermilion);color:#fff;padding:3px 8px;border-radius:999px;font-weight:700}
 @media (max-width:700px){
   .hero{min-height:min(80vh,640px)}
-  .hero img{object-position:45% 50%}
+  .hero img{object-position:50% 50%}
   .hero::after{background:linear-gradient(180deg,rgba(20,17,15,.35) 0%,rgba(20,17,15,.45) 40%,rgba(20,17,15,.92) 100%)}
   .hero .wrap{padding-top:96px;padding-bottom:48px}
   section{padding:64px 0}
